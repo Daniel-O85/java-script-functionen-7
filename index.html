@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .form1 {
+        background-color: yellowgreen;
+        padding: 5px;
+        border: 6px groove green;
+        margin: 5px;
+      }
+      .form2 {
+        background-color: skyblue;
+        border: 6px inset cornflowerblue;
+        padding: 5px;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="anzeigen"></main>
+    <script>
+      class AdressBuch {
+        constructor(ziel) {
+          this._ziel = ziel;
+          this._liste = [];
+          this._style = "";
+        }
+
+        set style(wert) {
+          if (typeof wert === "string") this._style = wert;
+        }
+
+        get style() {
+          return this._style;
+        }
+
+        box(_id, _typ, _text) {
+          let t = "";
+          if (_text !== undefined) {
+            if (typeof _text === "string" || typeof _text === "number")
+              t = _text;
+          }
+          switch (_typ) {
+            case undefined:
+            case "text":
+              this._liste.push({ id: _id, type: "text", text: t });
+              break;
+            case "zahl":
+              this._liste.push({ id: _id, type: "number", text: t });
+              break;
+            case "datum":
+              this._liste.push({ id: _id, type: "date", text: t });
+              break;
+            case "knopf":
+              this._liste.push({ id: _id, type: "button", text: t });
+              break;
+          }
+        }
+
+        erstellen() {
+          if (this._liste.length > 0) {
+            const aus = document.getElementById(this._ziel);
+            if (aus) {
+              let s = "";
+              for (let e of this._liste) {
+                switch (e.type) {
+                  case "text":
+                  case "number":
+                  case "date":
+                    s += `<p><label>${e.text}</label></p>
+                        <p><input type="${e.type}" id="${e.id}"></p>`;
+                    break;
+                  case "button":
+                    s += `<button id="${e.id}">${e.text}</button>`;
+                    break;
+                }
+              }
+              if (this._style !== "")
+                aus.innerHTML += `<div class="${this._style}">${s}</div>`;
+              else aus.innerHTML += s;
+            }
+          }
+        }
+      }
+      const aBuch1 = new AdressBuch("anzeigen");
+      aBuch1.style = "form1";
+      aBuch1.box("b-1", "text", "Firma");
+      aBuch1.box("b-2", "text", "Adresse");
+      aBuch1.box("b-3", "zahl", "Telefon");
+      aBuch1.box("b-4", "text", "Email");
+      aBuch1.box("b-5", "text", "Stadt");
+      aBuch1.box("b-6", "zahl", "PLZ");
+      aBuch1.box("b-7", "text", "Land");
+      aBuch1.box("b-8", "knopf", "Senden");
+      aBuch1.erstellen();
+
+      const aBuch2 = new AdressBuch("anzeigen");
+      aBuch2.style = "form2";
+      aBuch2.box("b-1", "text", "Firma");
+      aBuch2.box("b-2", "text", "Adresse");
+      aBuch2.box("b-3", "zahl", "Telefon");
+      aBuch2.box("b-4", "text", "Email");
+      aBuch2.box("b-5", "text", "Stadt");
+      aBuch2.box("b-6", "zahl", "PLZ");
+      aBuch2.box("b-7", "text", "Land");
+      aBuch2.box("b-8", "knopf", "Senden");
+      aBuch2.erstellen();
+    </script>
+  </body>
+</html>
